@@ -50,6 +50,15 @@ class Bot(commands.Bot):
                 logger.exception("Failed to load extension: %s", extension)
                 raise
 
+        # One-time cleanup: wipe guild-specific commands that were previously
+        # copied via copy_global_to(). Remove this block after running once.
+        _stale_guild_ids = [923105442790510615, 551586327758372884]
+        for _gid in _stale_guild_ids:
+            _g = discord.Object(id=_gid)
+            self.tree.clear_commands(guild=_g)
+            await self.tree.sync(guild=_g)
+            logger.info("Cleared guild-specific commands from guild %s", _gid)
+
         if self.guild_id:
             guild = discord.Object(id=self.guild_id)
             self.tree.copy_global_to(guild=guild)
