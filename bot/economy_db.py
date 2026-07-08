@@ -12,8 +12,6 @@ DB_PATH = PROJECT_ROOT / "data" / "economy.db"
 STARTING_BALANCE = 10_000
 PASSIVE_RATE = 50           # dollars per interval
 PASSIVE_INTERVAL = 15 * 60  # seconds (15 minutes)
-MAX_PASSIVE_HOURS = 24       # passive income caps after this many hours idle
-MAX_PASSIVE = int(MAX_PASSIVE_HOURS * 3600 / PASSIVE_INTERVAL) * PASSIVE_RATE
 
 
 class EconomyDB:
@@ -57,7 +55,7 @@ class EconomyDB:
     def _pending_passive(self, last_collected: int) -> int:
         elapsed = int(time.time()) - last_collected
         intervals = elapsed // PASSIVE_INTERVAL
-        return min(intervals * PASSIVE_RATE, MAX_PASSIVE)
+        return intervals * PASSIVE_RATE
 
     async def get_balance(self, user_id: int, guild_id: int) -> dict:
         await self._ensure_account(user_id, guild_id)

@@ -16,6 +16,10 @@ COG_EXTENSIONS = [
     "bot.cogs.general",
     "bot.cogs.mirror",
     "bot.cogs.economy",
+    "bot.cogs.blackjack",
+    "bot.cogs.roulette",
+    "bot.cogs.stocks",
+    "bot.cogs.slots",
     # "bot.cogs.moderation",
     # "bot.cogs.music",
 ]
