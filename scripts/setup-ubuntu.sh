@@ -16,7 +16,13 @@ if [[ "${EUID}" -ne 0 ]]; then
 fi
 
 echo "Installing system packages..."
-apt-get update
+# Allow apt-get update to succeed even if a third-party repo is unavailable.
+# All packages we need are in the standard Ubuntu repos.
+if ! apt-get update 2>&1; then
+  echo "Warning: one or more apt repositories failed to update."
+  echo "This is usually a broken third-party source and will not affect the install."
+  echo "Check /etc/apt/sources.list.d/ if you want to clean up the failing repo."
+fi
 apt-get install -y python3 python3-venv python3-pip git rsync
 
 if ! id "${SERVICE_USER}" &>/dev/null; then
